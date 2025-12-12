@@ -1,0 +1,20 @@
+{
+    "short_name": "Motion",
+    "name": "Min Motion",
+    "icons": [{
+            "src": "pic/weight192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "pic/weight512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ],
+    "start_url": "/motion/weight.php",
+    "background_color": "#FFFFFF",
+    "display": "standalone",
+    "scope": "/motion/",
+    "theme_color": "#1e90ff"
+}

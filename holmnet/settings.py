@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-01fiv&n@j-71x25b+4e!re#&vvn-p+5p*in0z9%2u%82o#pv(l
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['www.holmnet.dk']
+ALLOWED_HOSTS = ['127.0.0.1', '192.168.0.11','www.holmnet.dk']
 
 
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'motion',
 ]
 
 MIDDLEWARE = [
