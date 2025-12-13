@@ -4,8 +4,8 @@ from .models import Weight, BloodPressure
 
 @admin.register(Weight)
 class WeightAdmin(admin.ModelAdmin):
-    list_display = ('date', 'weight', 'fat', 'muscle', 'bmi', 'age')
-    list_filter = ('date', 'gender')
+    list_display = ('date_time', 'weight', 'fat', 'muscle', 'bmi')
+    list_filter = ('date',)
     search_fields = ('date',)
     ordering = ('-date',)
     readonly_fields = ('bmi',)

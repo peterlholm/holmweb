@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.db.models import Avg
+import django.utils
 from datetime import datetime, timedelta, date
 import json
 from decimal import Decimal
@@ -98,55 +99,71 @@ def blood_pressure(request):
 def save_weight(request):
     """View for saving weight data"""
     if request.method == 'GET':
-        # Show form
-        now = datetime.now()
-        context = {
-            'datetime': now.strftime('%Y-%m-%dT%H:%M'),
-            'date': now.strftime('%Y-%m-%d'),
-        }
-        return render(request, 'motion/save.html', context)
+        if not request.GET.get('DateTime'):
+            # Show form
+            now = datetime.now()
+            context = {
+                'datetime': now.strftime('%Y-%m-%dT%H:%M'),
+                'date': now.strftime('%Y-%m-%d'),
+            }
+            return render(request, 'motion/save.html', context)
     
-    elif request.method == 'POST':
-        try:
-            # Extract form data
-            datetime_str = request.POST.get('DateTime')
-            date_str = request.POST.get('Date')
-            age = request.POST.get('Age')
-            height = request.POST.get('Height')
-            weight = request.POST.get('Weight')
-            fat = request.POST.get('Fat')
-            bone = request.POST.get('Bone')
-            muscle = request.POST.get('Muscle')
-            vfat = request.POST.get('Vfat')
-            moisture = request.POST.get('Moisture')
-            calorie = request.POST.get('Calorie')
-            
-            # Parse datetime
-            if datetime_str:
-                dt = datetime.fromisoformat(datetime_str)
-            else:
-                dt = datetime.now()
-            
-            # Create Weight record
-            Weight.objects.create(
-                person_id=1,
-                date_time=dt,
-                date=datetime.strptime(date_str, '%Y-%m-%d').date(),
-                gender=1,
-                age=int(age) if age else 0,
-                height=Decimal(height) if height else None,
-                weight=Decimal(weight) if weight else None,
-                fat=Decimal(fat) if fat else None,
-                bone=Decimal(bone) if bone else None,
-                muscle=Decimal(muscle) if muscle else None,
-                vfat=Decimal(vfat) if vfat else None,
-                moisture=Decimal(moisture) if moisture else None,
-                calorie=int(calorie) if calorie else None,
-            )
-            
-            return JsonResponse({'success': True, 'message': 'Record saved successfully'})
-        except (ValueError, TypeError) as e:
-            return JsonResponse({'success': False, 'error': str(e)}, status=400)
+    if request.method == 'GET':
+        datetime_str = request.GET.get('DateTime')
+        date_str = request.GET.get('Date')
+        age = request.GET.get('Age')
+        height = request.GET.get('Height')
+        weight = request.GET.get('Weight')
+        fat = request.GET.get('Fat')
+        bone = request.GET.get('Bone')
+        muscle = request.GET.get('Muscle')
+        vfat = request.GET.get('Vfat')
+        moisture = request.GET.get('Moisture')
+        calorie = request.GET.get('Calorie')
+    else:
+        # Extract form data
+        datetime_str = request.POST.get('DateTime')
+        date_str = request.POST.get('Date')
+        age = request.POST.get('Age')
+        height = request.POST.get('Height')
+        weight = request.POST.get('Weight')
+        fat = request.POST.get('Fat')
+        bone = request.POST.get('Bone')
+        muscle = request.POST.get('Muscle')
+        vfat = request.POST.get('Vfat')
+        moisture = request.POST.get('Moisture')
+        calorie = request.POST.get('Calorie')
+        
+    try:
+        # Parse datetime
+        if datetime_str:
+            dt = datetime.fromisoformat(datetime_str)
+        else:
+            dt = django.utils.timezone.now()
+        
+        if django.utils.timezone.is_naive(dt):
+            dt = django.utils.timezone.make_aware(dt)
+
+        # Create Weight record
+        Weight.objects.create(
+            person_id=1,
+            date_time=dt,
+            date=datetime.strptime(date_str, '%Y-%m-%d').date(),
+            gender=1,
+            age=int(age) if age else 0,
+            height=Decimal(height) if height else None,
+            weight=Decimal(weight) if weight else None,
+            fat=Decimal(fat) if fat else None,
+            bone=Decimal(bone) if bone else None,
+            muscle=Decimal(muscle) if muscle else None,
+            vfat=Decimal(vfat) if vfat else None,
+            moisture=Decimal(moisture) if moisture else None,
+            calorie=int(calorie) if calorie else None,
+        )
+        
+        return JsonResponse({'success': True, 'message': 'Record saved successfully'})
+    except (ValueError, TypeError) as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=400)
 
 
 def save_blood_pressure(request):
