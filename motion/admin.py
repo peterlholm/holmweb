@@ -1,9 +1,11 @@
+"admin module for motion"
 from django.contrib import admin
 from .models import Weight, BloodPressure
 
 
 @admin.register(Weight)
 class WeightAdmin(admin.ModelAdmin):
+    "Weight admin display"
     list_display = ('date_time', 'weight', 'fat', 'muscle', 'bmi')
     list_filter = ('date',)
     search_fields = ('date',)
@@ -25,19 +27,19 @@ class WeightAdmin(admin.ModelAdmin):
 
 @admin.register(BloodPressure)
 class BloodPressureAdmin(admin.ModelAdmin):
+    "blodtryk admin"
     list_display = ('date', 'systolic', 'diastolic', 'get_bp_status')
     list_filter = ('date',)
     search_fields = ('date',)
     ordering = ('-date',)
-    
+
     def get_bp_status(self, obj):
         """Display blood pressure status"""
         if obj.systolic < 120 and obj.diastolic < 80:
             return "Normal"
-        elif obj.systolic < 130 and obj.diastolic < 80:
+        if obj.systolic < 130 and obj.diastolic < 80:
             return "Elevated"
-        elif obj.systolic < 140 or obj.diastolic < 90:
+        if obj.systolic < 140 or obj.diastolic < 90:
             return "Stage 1 Hypertension"
-        else:
-            return "Stage 2 Hypertension"
+        return "Stage 2 Hypertension"
     get_bp_status.short_description = "Status"

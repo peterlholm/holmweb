@@ -1,3 +1,6 @@
+[MAIN]
+ignore=.venv
+
 [MASTER]
 load-plugins=pylint_django
 

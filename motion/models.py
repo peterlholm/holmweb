@@ -1,3 +1,4 @@
+"django motion models"
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
@@ -8,7 +9,7 @@ class Weight(models.Model):
         (1, 'Male'),
         (2, 'Female'),
     ]
-    
+
     person_id = models.IntegerField(default=1)
     date_time = models.DateTimeField()
     date = models.DateField()
@@ -24,16 +25,16 @@ class Weight(models.Model):
     calorie = models.IntegerField(null=True, blank=True, help_text="Daily calorie intake")
     bmi = models.DecimalField(max_digits=5, decimal_places=1, null=True, blank=True, help_text="Body Mass Index")
     muscle_p = models.DecimalField(max_digits=5, decimal_places=1, null=True, blank=True, help_text="Muscle percentage")
-    
+
     class Meta:
         ordering = ['-date']
         indexes = [
             models.Index(fields=['person_id', 'date']),
         ]
-    
+
     def __str__(self):
         return f"Weight record for {self.date}: {self.weight} kg"
-    
+
     def save(self, *args, **kwargs):
         # Calculate BMI if not provided
         if not self.bmi and self.height and self.weight:
@@ -48,7 +49,7 @@ class BloodPressure(models.Model):
     date = models.DateField()
     systolic = models.IntegerField(help_text="Systolic pressure (upper number)")
     diastolic = models.IntegerField(help_text="Diastolic pressure (lower number)")
-    
+
     class Meta:
         ordering = ['-date']
         indexes = [
@@ -56,6 +57,6 @@ class BloodPressure(models.Model):
         ]
         verbose_name = "Blood Pressure"
         verbose_name_plural = "Blood Pressures"
-    
+
     def __str__(self):
         return f"Blood pressure for {self.date}: {self.systolic}/{self.diastolic}"
