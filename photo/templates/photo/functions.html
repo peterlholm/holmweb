@@ -1,0 +1,25 @@
+{% extends "photo/base_menu.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="page">
+    <h1>Photo</h1>
+    {% if debug %}
+         
+    {% endif%}
+   <h2>Functions</h2>
+  
+    <a class="btn btn-lg btn-primary"  href="{% url 'photo:photo_index' %}">Index</a>Index<br><br>
+    <a class="btn btn-lg btn-primary" href="{% url 'photo:folder_list' %}">Folder List</a>Folder List  <br><br>
+ 
+</div>
+
+
+{% endblock %}
+
+{% block script %}
+<script>
+    //document.getElementById("menu_index").classList.add("active");
+</script>
+{% endblock %}

@@ -4,7 +4,7 @@ ignore=.venv
 [MASTER]
 load-plugins=pylint_django
 
-#django-settings-module=compute.settings
+django-settings-module=holmnet.settings
 
 logging-format-style=new
 
