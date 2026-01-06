@@ -126,3 +126,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = "http://holmnet.dk/pictures/"
 MEDIA_ROOT = "/data/Photo"
+
+# PHOTO APP
+
+PHOTO_DIR = "/data/Photo"
+
+try:
+    from .settings_local import *  # pylint: disable=wildcard-import
+except ModuleNotFoundError:
+    pass

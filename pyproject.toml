@@ -1,2 +1,2 @@
 [tool.vulture]
-exclude = [".venv/"]
+exclude = [".venv/","*/*/migrations/*.py"]

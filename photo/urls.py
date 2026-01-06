@@ -9,5 +9,5 @@ urlpatterns = [
     path('album', views.album, name='album'),
     path('show', views.show, name='show'),
     path('functions', views.functions, name='functions'),
-    path('folder_list', views.folder_list, name='folder_list'),
+    path('create_albums', views.create_albums, name='create_albums'),
 ]
