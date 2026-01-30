@@ -2,9 +2,9 @@
 {% load static %}
 
 {% block page %}
-  <div class="containerxx">
-    <nav class="navbar navbar-expand-lg xxnavbar-light bg-light">
-      <div class="container-fluid">
+  <header>
+    <nav class="navbar navbar-expand-lg xxnavbar-light bg-light d-print-none">
+      
         <a class="navbar-brand" href="/photo/#">
           <img src="{% static 'photo/pic/photo_24.svg' %}" alt="photo logo" width="30" height="24" class="d-inline-block align-text-top" />
           Foto
@@ -13,34 +13,37 @@
         <!-- menu items -->
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            {% if devel %}  
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" id="menu_index" aria-current="page" href="{% url 'photo:photo_index' %}">index</a>
+              </li>
+            {% endif %}
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" id="menu_index" aria-current="page" href="{% url 'photo:photo_index' %}">index</a>
+              <a class="nav-link" aria-current="page" id="menu_album" aria-current="page" href="{% url 'photo:album' %}">Album</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" aria-current="page" id="menu_list" aria-current="page" href="{% url 'photo:album' %}">Album</a>
+              <a class="nav-link" aria-current="page" id="menu_slides" href="{% url 'photo:show' %}">Billeder</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" id="menu_show" href="{% url 'photo:show' %}">Slides</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" id="menu_func" href="{% url 'photo:functions' %}">Funktioner</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" id="menu_func" href="/admin">Admin</a>
-            </li>
+            {% if devel %}     
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" id="menu_func" href="{% url 'photo:functions' %}">Funktioner</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" id="menu_admin" href="/admin" target="_blank">Admin</a>
+              </li>
+            {% endif %}
           </ul>
         </div>
-      </div>
+      
     </nav>
+  </header>
 
     {% block content %}
 
     {% endblock %}
-  </div> <!-- container -->
+ 
 {% endblock %}
 
 {% block script %}
-  <script>
-    $('#menu_start').addClass('active')
-  </script>
+
 {% endblock %}

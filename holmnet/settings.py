@@ -124,12 +124,14 @@ STATIC_ROOT = BASE_DIR / "static"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-MEDIA_URL = "http://holmnet.dk/pictures/"
-MEDIA_ROOT = "/data/Photo"
+MEDIA_URL = "/data/"
+MEDIA_ROOT = BASE_DIR / 'data'
+
+DEVEL = False
 
 # PHOTO APP
 
-PHOTO_DIR = "/data/Photo"
+PHOTO_DIR = "/data/Photos"
 
 try:
     from .settings_local import *  # pylint: disable=wildcard-import

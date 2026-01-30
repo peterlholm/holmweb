@@ -7,3 +7,4 @@ env/
 data/
 holmnet/settings_local.py
 static/
+bootstrap/
