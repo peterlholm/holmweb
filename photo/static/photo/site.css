@@ -1,0 +1,43 @@
+
+.myflex {
+    /* xborder: blue 2px solid; */
+    display: flex;
+    min-height: 100vh;
+    height: 100vh;
+    max-height: 100vh;
+    flex-direction: column;
+}
+
+.page {
+    /* xborder: green solid 3px; */
+    height: 80vh;
+    flex: 1;
+    object-fit: contain;
+}
+
+.footer {
+    height:40px;
+    background-color: bisque;
+    border: yellow solid 1px;
+}
+
+li a {
+    color: green;
+}
+
+/* slides */
+
+/* .carousel-caption {
+    xborder: solid black 2px;
+    xcolor: blue 
+} */
+
+carousel-control-prev {
+    height: 4rem;
+        font-size: 32px;
+
+}
+carousel-control-prev-icon {
+    height: 4rem;
+    font-size: 32px;
+}
