@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="da">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Blodtryk</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+
+<body>
+    <div class="container-lg mt-5">
+        <h2>Blodtryk</h2>
+        
+        <style>
+            .graph {
+                height: 400px;
+            }
+        </style>
+
+        <div class="row mb-4">
+            <div class="col-md-6 graph">
+                <canvas id="weight_div"></canvas>
+            </div>
+            <div class="col-md-6 graph">
+                <canvas id="bp_div"></canvas>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-md-6">
+                <a href="{% url 'motion:index' %}" class="btn btn-secondary">Tilbage til vægt</a>
+            </div>
+            <div class="col-md-6">
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#bpModal">Gem blodtryk</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for saving blood pressure -->
+    <div class="modal fade" id="bpModal" tabindex="-1" aria-labelledby="bpModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="bpModalLabel">Gem blodtryksmåling</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="bpForm">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="bpDate" class="form-label">Dato</label>
+                            <input type="date" class="form-control" id="bpDate" name="Date" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="systolic" class="form-label">Systolisk (øvre værdi)</label>
+                            <input type="number" class="form-control" id="systolic" name="Systolic" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="diastolic" class="form-label">Diastolisk (nedre værdi)</label>
+                            <input type="number" class="form-control" id="diastolic" name="Diastolic" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuller</button>
+                        <button type="submit" class="btn btn-primary">Gem</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Set today's date in the modal form
+        document.getElementById('bpDate').valueAsDate = new Date();
+
+        // Weight Chart
+        const weight_data = {{ weight_data|safe }};
+        if (weight_data.length > 0) {
+            const weightCtx = document.getElementById('weight_div').getContext('2d');
+            new Chart(weightCtx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Vægt (kg)',
+                        data: weight_data,
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                        showLine: true,
+                        fill: false,
+                        tension: 0.1,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Vægt Udvikling'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: 'Dato'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Vægt (kg)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Blood Pressure Chart
+        const bp_data = {{ bp_data|safe }};
+        if (bp_data.length > 0) {
+            const bpCtx = document.getElementById('bp_div').getContext('2d');
+            new Chart(bpCtx, {
+                type: 'scatter',
+                data: {
+                    datasets: [
+                        {
+                            label: 'Systolisk (øvre)',
+                            data: bp_data.map(d => ({x: d.x, y: d.systolic})),
+                            borderColor: 'rgb(255, 99, 132)',
+                            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                            showLine: true,
+                            fill: false,
+                            tension: 0.1,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                        },
+                        {
+                            label: 'Diastolisk (nedre)',
+                            data: bp_data.map(d => ({x: d.x, y: d.diastolic})),
+                            borderColor: 'rgb(54, 162, 235)',
+                            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                            showLine: true,
+                            fill: false,
+                            tension: 0.1,
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Blodtryk Udvikling'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: 'Dato'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'mmHg'
+                            },
+                            min: 40,
+                            max: 200
+                        }
+                    }
+                }
+            });
+        }
+
+        // Handle form submission
+        document.getElementById('bpForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            fetch('{% url "motion:save_blood_pressure" %}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    location.reload();
+                } else {
+                    alert('Fejl: ' + data.error);
+                }
+            })
+            .catch(error => {
+                alert('Fejl ved indsendelse: ' + error);
+            });
+        });
+    </script>
+</body>
+
+</html>

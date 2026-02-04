@@ -1,0 +1,8 @@
+django==5.*
+pillow
+geopy
+
+pylint
+pylint-django
+
+vulture

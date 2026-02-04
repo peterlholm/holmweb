@@ -1,0 +1,41 @@
+{% extends 'photo/base_menu.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="page">
+    <h1>Foto Album</h1>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">No Pictures</th>         
+          <th scope="col">No Videos</th>
+          {% if devel %}
+            <th scope="col">Path</th>
+            <th scope="col">Date</th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+         {% for f in album_list %}
+          <tr>
+            <th scope="row"><a href="/photo/show?folder={{ f.folder }}">{{ f.name }}</a></th>
+            <td>{{ f.no_pictures }}</td>
+            <td>{{ f.no_video }}</td>
+            {% if devel %}
+            <td><a href="/photo/show?folder={{ f.folder }}"> {{ f.folder }}</a></td>
+            <td>{{ f.date }}</td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
+
+{% block script %}
+  <script>
+    document.getElementById("menu_album").classList.add("active");
+  </script>
+{% endblock %}

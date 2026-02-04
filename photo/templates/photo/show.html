@@ -1,0 +1,94 @@
+{% extends 'photo/base_menu.html' %}
+{% load static %}
+
+{% block head %}
+<style>
+  .carousel-indicators {
+    top: 0;
+  }
+  .carousel-control-prev, .carousel-control-next {
+    bottom: 100px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+      <div id="myCarousel" class="carousel xcarousel-dark slide carousel-fade page dark" data-bs-ride="carousel" data-bs-interval="{{interval}}" data-bs-wrap="false" data-bs-pause="false" data-bs-theme="xdark">
+        <div class="carousel-indicators d-print-none">
+          {% for slide in slides %}
+            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}" aria-label="Slide {{ forloop.counter0 }}"></button>
+          {% endfor %}
+          </div>  
+        <div class="carousel-inner">
+          {% for slide in slides %}
+            {% if slide.type == "video" %}
+              <div class="carousel-item {% if forloop.first %}active{% endif %}" data-bs-interval="15000">
+                <video style="z-index: 10;" class="slide-video" src="{{ slide.url }}" alt="{{ slide.name }}" xautoplay xmuted controls >
+                  <source src="{{ slide.url }}" type="video/mp4">
+                  Cannot show video
+                </video>
+            {% else %}
+              <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <img src="{{ slide.url }}" class="slide-img" alt="{{ slide.name }}" />
+                <div class="carousel-caption d-none d-md-block d-print-none">
+                  <h5>FileName: {{slide.name }} </h5>
+                  {% if devel %}
+                    <h5>Date: {{slide.atributes.DateTime}}</h5>
+                    <p>GPS: {{slide.atributes.gps}} {{slide.atributes.address}}</p>
+                  {% endif %}
+                </div>
+            {% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      <button class="carousel-control-prev d-print-none" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next d-print-none" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+  
+    </div>
+  <div class="footer d-print-none">   
+      <button class="btn btn-primary" onclick="slideSave()"><i class="bi bi-save"></i></button>
+      <button class="btn btn-primary" onclick="printPage()"><i class="bi bi-printer"></i></button>
+      <button class="btn btn-primary" onclick="slidePause()"><i class="bi bi-pause"></i></button>
+      <button class="btn btn-primary" onclick="slideStart()"><i class="bi bi-play"></i></button>
+     
+      <span class="text-center">{{folder}}</span>
+  </div>
+{% endblock %}
+
+{% block script %}
+  <script>
+    {% comment %} const carouselEl = document.querySelector('#myCarousel');
+    const carouselInstance = new bootstrap.Carousel(carouselEl);
+    const videos = carouselEl.querySelectorAll('.slide-video');
+
+    videos.forEach(video => {
+      // Pause carousel when any video starts playing
+      video.addEventListener('play', () => {
+        carouselInstance.pause();
+      });
+
+      // Resume carousel when any video is paused or ends
+      video.addEventListener('pause', () => {
+        carouselInstance.cycle();
+      });
+      
+      video.addEventListener('ended', () => {
+        carouselInstance.cycle();
+      });
+    });
+
+    // IMPORTANT: Pause all videos when the user manually switches slides
+    carouselEl.addEventListener('slide.bs.carousel', () => {
+      videos.forEach(video => video.pause());
+    }); {% endcomment %}
+    
+
+    document.getElementById("menu_slides").classList.add("active");
+  </script>
+{% endblock %}

@@ -1,0 +1,80 @@
+
+.myflex {
+    /* xborder: blue 2px solid; */
+    display: flex;
+    min-height: 100vh;
+    height: 100vh;
+    max-height: 100vh;
+    flex-direction: column;
+}
+
+.page {
+    /* xborder: green solid 3px; */
+    height: 80vh;
+    flex: 1;
+    object-fit: contain;
+    xbackground-color: black;
+}
+
+
+ /* slides */
+
+.dark {
+    background-color: black;
+    color: white;
+ }
+
+.footer {
+    height:40px;
+    background-color: bisque;
+    border: yellow solid 1px;
+}
+
+carousel-control-prev {
+    height: 4rem;
+        font-size: 32px;
+
+}
+carousel-control-prev-icon {
+    height: 4rem;
+    font-size: 32px;
+}
+
+
+.carousel-inner {
+   height: 100%;
+   width: 100%;
+}
+
+.carousel-item {
+    height: 100%;
+    width: 100%;
+}
+
+.slide-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+} 
+
+.slide-video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+}
+
+@media print {
+    .portrait {
+        @page {
+            size: A4 portrait;
+        }
+    }
+    /* @page {
+        size: A4 landscape;
+    } */
+    /* .portrait {
+        size: A4 portrait;
+    } */
+}

@@ -1,0 +1,28 @@
+{% extends "photo/base_menu.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="pagexx">
+
+    {% if debug %}
+         
+    {% endif%}
+   <h2>Functions</h2>
+  
+    <a class="btn btn-lg btn-primary" href="{% url 'photo:copy_testdata' %}">Copy Testdata</a><br><br>
+    <a class="btn btn-lg btn-primary" href="{% url 'photo:create_test_albums' %}?clear=1">Create Test Albums</a><br><br>
+    <a class="btn btn-lg btn-primary" href="{% url 'photo:create_albums' %}?clear=1">Clear and Create Albums</a><br><br>
+    <a class="btn btn-lg btn-primary" href="{% url 'photo:add_albums' %}">Add Albums</a><br><br>
+    <a class="btn btn-lg btn-primary" href="{% url 'photo:add_albums' %}?clear=1">Clear and Add Albums</a><br><br>
+
+</div>
+
+
+{% endblock %}
+
+{% block script %}
+<script>
+    //document.getElementById("menu_index").classList.add("active");
+</script>
+{% endblock %}

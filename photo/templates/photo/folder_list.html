@@ -1,0 +1,24 @@
+{% extends "photo/base_menu.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="page">
+    <h1>Lysbilled serier</h1>
+
+
+    <h2>test</h2>
+
+    {% for f in folder_list %}
+        {{ f }}<br>
+    {% endfor %}
+</div>
+
+
+{% endblock %}
+
+{% block script %}
+<script>
+    //document.getElementById("menu_index").classList.add("active");
+</script>
+{% endblock %}

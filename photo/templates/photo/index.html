@@ -1,0 +1,36 @@
+{% extends 'photo/base_menu.html' %}
+{% load static %}
+{% block style %}
+  <style>
+    .index {
+      font-size: 2em;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<main role="main">
+  <div class="container">
+    <div class="index">
+      <h1>Dagens udvalgte fotoalbummer</h1>
+      <ul>
+        <li>
+          <a href="show?folder=2025/2025-09%20Bulgarien">Bulgarien 2025</a>
+        </li>
+        <li>
+          <a href="show?folder=2025/2025-12%20Nytarsbadning">Nytårsbadning 2025</a>
+        </li>
+        <li>
+          <a href="show?folder=2025/2025-02%20Tennis%20Fuerteventura">Tennis Fuerteventura 2025</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block script %}
+  <script>
+    document.getElementById('menu_index').classList.add('active')
+  </script>
+{% endblock %}

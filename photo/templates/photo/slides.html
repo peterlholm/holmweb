@@ -1,0 +1,52 @@
+{% extends 'photo/base_menu.html' %}
+{% load static %}
+
+{% block content %}
+      <div id="myCarousel" class="carousel xcarousel-dark slide carousel-fade page" data-bs-ride="carousel" data-bs-interval="{{interval}}" data-bs-wrap="false" data-bs-pause="false">
+        <div class="carousel-indicators d-print-none">
+          {% for slide in slides %}
+            <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}" aria-label="Slide {{ forloop.counter0 }}"></button>
+          {% endfor %}
+          </div>  
+        <div class="carousel-inner">
+          {% for slide in slides %}
+          <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <img src="{{ slide.url }}" class="slide-img" alt="{{ slide.name }}" />
+            <div class="carousel-caption d-none xd-md-block d-print-none">
+              {% if devel %}
+              <h5>FileName: {{slide.name }} </h5>
+              <h5>Date: {{slide.atributes.DateTime}}</h5>
+              <p>GPS: {{slide.atributes.gps}} {{slide.atributes.address}}</p>
+              <div class="picinfo">
+                FileName: {{slide.name }} 
+              </div>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      <button class="carousel-control-prev d-print-none" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next d-print-none" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+  
+    </div>
+  <div class="footer d-print-none">   
+      <button class="btn btn-primary" onclick="slideSave()"><i class="bi bi-save"></i></button>
+      <button class="btn btn-primary" onclick="printPage()"><i class="bi bi-printer"></i></button>
+      <button class="btn btn-primary" onclick="slidePause()"><i class="bi bi-pause"></i></button>
+      <button class="btn btn-primary" onclick="slideStart()"><i class="bi bi-play"></i></button>
+     
+      <span class="text-center">{{folder}}</span>
+  </div>
+{% endblock %}
+
+{% block script %}
+  <script>
+    document.getElementById("menu_slides").classList.add("active");
+  </script>
+{% endblock %}

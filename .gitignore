@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+*.log
+*.pot
+db.sqlite3
+db.sqlite3-journal
+env/
+/data/
+holmnet/settings_local.py
+/bootstrap/
+/static/
