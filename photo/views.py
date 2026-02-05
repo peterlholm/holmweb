@@ -3,7 +3,9 @@ from pathlib import Path
 from shutil import copytree
 from django.shortcuts import render, redirect
 from django.conf import settings
-from .utils import create_folder_table, create_album_list, get_picture_list, get_media_list #, get_url_picture
+from .utils import create_folder_table, create_album_list, get_picture_list, get_media_list, save_dict_to_file, read_dict_from_file, default_dict#, get_url_picture
+from .forms import LabelForm
+#from .file_utils import save_dict_to_file, read_dict_from_file, default_dict
 
 SLIDE_INTERVAL = 3000
 
@@ -54,6 +56,41 @@ def show(request):     # pylint: disable=unused-argument
     #context = {**init_context, "folder":folder, "slides": plist, "interval": 10000}
     #print(context)
     return render(request, 'photo/show.html', context)
+
+def label(request):
+    "Label form generator"
+    if request.method == "GET":
+        form = LabelForm(request.GET)
+        if form.is_valid():
+            print("valid")
+            photo_path = settings.PHOTO_DIR / form.cleaned_data['path']
+            print(photo_path)
+            file_path = photo_path / "label.json"
+            album_dict = read_dict_from_file(file_path)
+            if album_dict:
+                print("album_dict", album_dict)
+                form.data['album_title'] = "titleellele"
+            #print(form['path'])
+    if request.method == "POST":
+        # create a form instance and populate it with data from the request:
+        print(request.POST)
+        form = LabelForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            print(form.cleaned_data)
+            path = form.cleaned_data["path"]
+            def_dict = default_dict(settings.PHOTO_DIR / path )
+            print(def_dict)
+            album_path = settings.PHOTO_DIR / path / "label.json"
+            print (album_path)
+            label_dict = {"title": form.cleaned_data["album_title"], "date": form.cleaned_data["date"] }
+            save_dict_to_file(label_dict, album_path)
+    # else:
+    # # if a GET (or any other method) we'll create a blank form
+    #     form = LabelForm()
+
+    context = {  **init_context, "form": form }
+    return render(request, "photo/label.html", context)
 
 def base(request):
     "base test page"

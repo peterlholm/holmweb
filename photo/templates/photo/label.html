@@ -1,0 +1,33 @@
+{% extends 'photo/base_menu.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<h1>Label</h1>
+<main>
+  <div class="container">
+    <form method="post" class="my-class">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <input type="submit" value="read">
+      <input type="submit" value="write" class="btn btn-primary">
+    </form>
+ 
+  </div>
+</main>
+{% endblock %}
+
+{% block script %}
+  <script>
+    function submit() {
+      this.form.method = 'GET'
+      this.form.submit();
+    }
+    path = document.getElementById("id_path");
+    console.log(path);
+    path.addEventListener('change', submit)
+
+    document.getElementById('menu_label').classList.add('active')
+  </script>
+{% endblock %}

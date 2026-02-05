@@ -12,6 +12,7 @@ urlpatterns = [
     path('slide', views.slides, name='slide'),
     path('show', views.show, name='show'),
     path('functions', views.functions, name='functions'),
+    path('label', views.label, name='label'),
     path('copy_testdata', views.copy_testdata, name='copy_testdata'),
     path('create_albums', views.create_albums, name='create_albums'),
     path('create_test_albums', views.create_test_albums, name='create_test_albums'),

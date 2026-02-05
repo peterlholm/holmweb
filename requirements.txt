@@ -1,6 +1,8 @@
 django==5.*
 pillow
 geopy
+django-crispy-forms
+crispy-bootstrap5
 
 pylint
 pylint-django

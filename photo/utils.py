@@ -1,6 +1,7 @@
 "utils for picture control"
 from pathlib import Path
 from datetime import datetime
+import json
 from urllib import parse
 from django.conf import settings
 from django.forms.models import model_to_dict
@@ -175,3 +176,37 @@ def get_picture_info(file: Path):
     #         address = ""
     pict_info = {"DateTime": date, "Orientation": orientation, "Make": make, "Model": model, "gps":gps_info, "address": address}
     return pict_info
+
+
+def save_dict_to_file(album_info: dict, filename: Path):
+    "save dict to file"
+    fp = open(filename, "w", encoding='utf-8')
+    json.dump(album_info, fp, indent=2, ensure_ascii=False)
+
+def read_dict_from_file(filename: Path):
+    "read dict in file"
+    if not filename.exists(): 
+        return None
+    fp = open(filename, 'r', encoding="utf-8")
+    album_info = json.load(fp)
+    return album_info
+
+def default_dict(album_path: Path):
+    "find default dict info"
+    if not album_path.is_dir():
+        raise Exception("not a folder")
+    label = {'title':"", "date": ""}
+    pic_list = get_picture_list(album_path)
+    if len(pic_list)>0:
+        pic_info = get_picture_info(pic_list[0]['file'])
+        print(pic_info)
+        label = {'title': album_path.name, "date": pic_info['DateTime']}
+    print("label", label)
+    return label
+
+if __name__ == '__main__':
+    print("starter")
+    a = {"dffd": "iæøå", "b": 26}
+    save_dict_to_file(a, "dummy.txt")
+    a=read_dict_from_file("dummy.txt")
+    print("dict", a)
