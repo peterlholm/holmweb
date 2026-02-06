@@ -200,7 +200,8 @@ def default_dict(album_path: Path):
     if len(pic_list)>0:
         pic_info = get_picture_info(pic_list[0]['file'])
         print(pic_info)
-        label = {'title': album_path.name, "date": pic_info['DateTime']}
+        date  = datetime.strptime(pic_info['DateTime'], '%Y:%m:%d %H:%M:%S')
+        label = {'title': album_path.name, "date": date.strftime('%Y-%m-%d')}
     print("label", label)
     return label
 

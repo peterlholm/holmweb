@@ -60,34 +60,33 @@ def show(request):     # pylint: disable=unused-argument
 def label(request):
     "Label form generator"
     if request.method == "GET":
-        form = LabelForm(request.GET)
-        if form.is_valid():
-            print("valid")
-            photo_path = settings.PHOTO_DIR / form.cleaned_data['path']
-            print(photo_path)
+        album_path = request.GET.get('path', "")
+        photo_path = settings.PHOTO_DIR / album_path
+        form_init = None
+        if photo_path.exists():
             file_path = photo_path / "label.json"
             album_dict = read_dict_from_file(file_path)
             if album_dict:
                 print("album_dict", album_dict)
-                form.data['album_title'] = "titleellele"
-            #print(form['path'])
+                form_init = album_dict
+            else:
+                def_dict = default_dict(photo_path )
+                print(def_dict)
+                form_init = def_dict
+            form_init = {**form_init, "path": album_path}
+            #print(form_init)
+            form = LabelForm(form_init)
+        else:
+            form = LabelForm()
     if request.method == "POST":
         # create a form instance and populate it with data from the request:
-        print(request.POST)
         form = LabelForm(request.POST)
-        # check whether it's valid:
         if form.is_valid():
-            print(form.cleaned_data)
+            #print(form.cleaned_data)
             path = form.cleaned_data["path"]
-            def_dict = default_dict(settings.PHOTO_DIR / path )
-            print(def_dict)
-            album_path = settings.PHOTO_DIR / path / "label.json"
-            print (album_path)
-            label_dict = {"title": form.cleaned_data["album_title"], "date": form.cleaned_data["date"] }
+            album_path = Path(path) / "label.json"
+            label_dict = {"title": form.cleaned_data["title"], "date": str(form.cleaned_data["date"]), "place": form.cleaned_data["place"] }
             save_dict_to_file(label_dict, album_path)
-    # else:
-    # # if a GET (or any other method) we'll create a blank form
-    #     form = LabelForm()
 
     context = {  **init_context, "form": form }
     return render(request, "photo/label.html", context)
