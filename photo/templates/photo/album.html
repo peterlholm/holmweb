@@ -8,12 +8,13 @@
     <table class="table">
       <thead>
         <tr>
-          <th scope="col">Name</th>
-          <th scope="col">No Pictures</th>         
-          <th scope="col">No Videos</th>
+          <th scope="col">Titel</th>
+          <th scope="col">Sted</th>
+          <th scope="col">Antal billeder</th>         
+          <th scope="col">Antal Videoer</th>
           {% if devel %}
             <th scope="col">Path</th>
-            <th scope="col">Date</th>
+            <th scope="col">Dato</th>
           {% endif %}
         </tr>
       </thead>
@@ -21,6 +22,7 @@
          {% for f in album_list %}
           <tr>
             <th scope="row"><a href="/photo/show?folder={{ f.folder }}">{{ f.name }}</a></th>
+            <td>{{ f.place }}</td>
             <td>{{ f.no_pictures }}</td>
             <td>{{ f.no_video }}</td>
             {% if devel %}

@@ -80,8 +80,18 @@ def create_folder_table(root_folder: Path, rel_folder=settings.PHOTO_DIR, clear_
         print(l)
         n = count_pictures(a)
         v = count_video_files(a)
+        title = l.name
+        date = datetime.today()
+        place = ""
+        d = read_dict_from_file(a / 'label.json')
+        print(d)
+        if d:
+            title = d['title']
+            date = d['date']
+            if 'place' in d:
+                place = d['place']
         if n>0:
-            s = Album(folder = str(l), name=l.name, date=datetime.today(), no_pictures=n, no_video=v)
+            s = Album(folder = str(l), name=title, date=date, no_pictures=n, no_video=v, place=place)
             s.save()
             rel_list.append(l)
         #print("Rellist",rel_list)
@@ -117,14 +127,12 @@ def get_picture_list(folder: Path):
 
 def get_media_list(folder: Path):
     "get list of (filename, url)"
-    #print("folder",folder)
     abs_folder = Path(settings.PHOTO_DIR) / folder
-    #print("abs_folder", abs_folder)
     picfiles = get_media_filename(abs_folder)
     plist = []
     #pinfo = []
     for f in picfiles:
-        print(f)
+        #print(f)
         u = get_url_picture(f)
         if f.suffix==".mp4":
             # this is a video
@@ -185,7 +193,7 @@ def save_dict_to_file(album_info: dict, filename: Path):
 
 def read_dict_from_file(filename: Path):
     "read dict in file"
-    if not filename.exists(): 
+    if not filename.exists():
         return None
     fp = open(filename, 'r', encoding="utf-8")
     album_info = json.load(fp)
@@ -194,20 +202,20 @@ def read_dict_from_file(filename: Path):
 def default_dict(album_path: Path):
     "find default dict info"
     if not album_path.is_dir():
-        raise Exception("not a folder")
+        raise FileNotFoundError("not a folder")
     label = {'title':"", "date": ""}
     pic_list = get_picture_list(album_path)
     if len(pic_list)>0:
         pic_info = get_picture_info(pic_list[0]['file'])
-        print(pic_info)
+        #print(pic_info)
         date  = datetime.strptime(pic_info['DateTime'], '%Y:%m:%d %H:%M:%S')
         label = {'title': album_path.name, "date": date.strftime('%Y-%m-%d')}
-    print("label", label)
+    #print("label", label)
     return label
 
 if __name__ == '__main__':
     print("starter")
-    a = {"dffd": "iæøå", "b": 26}
-    save_dict_to_file(a, "dummy.txt")
-    a=read_dict_from_file("dummy.txt")
-    print("dict", a)
+    A = {"dffd": "iæøå", "b": 26}
+    save_dict_to_file(A, "dummy.txt")
+    A=read_dict_from_file("dummy.txt")
+    print("dict", A)

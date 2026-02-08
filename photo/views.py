@@ -67,11 +67,11 @@ def label(request):
             file_path = photo_path / "label.json"
             album_dict = read_dict_from_file(file_path)
             if album_dict:
-                print("album_dict", album_dict)
+                #print("album_dict", album_dict)
                 form_init = album_dict
             else:
                 def_dict = default_dict(photo_path )
-                print(def_dict)
+                #print(def_dict)
                 form_init = def_dict
             form_init = {**form_init, "path": album_path}
             #print(form_init)

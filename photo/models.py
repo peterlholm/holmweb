@@ -6,6 +6,7 @@ class Album(models.Model):
     folder = models.CharField(max_length=90)
     name = models.CharField(max_length=40)
     date = models.DateField()
+    place = models.CharField(max_length=40, default="")
     no_pictures = models.IntegerField(default=0)
     no_video = models.IntegerField(default=0)
 

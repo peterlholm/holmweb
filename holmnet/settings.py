@@ -140,6 +140,7 @@ DEVEL = False
 # PHOTO APP
 
 PHOTO_DIR = "/data/Photos"
+PHOTO_URL = "pictures/"
 
 try:
     from .settings_local import *  # pylint: disable=wildcard-import

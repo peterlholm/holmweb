@@ -30,6 +30,7 @@
             {% else %}
               <div class="carousel-item {% if forloop.first %}active{% endif %}">
                 <img src="{{ slide.url }}" class="slide-img" alt="{{ slide.name }}" />
+                {% if caption %}
                 <div class="carousel-caption d-none d-md-block d-print-none">
                   <h5>FileName: {{slide.name }} </h5>
                   {% if devel %}
@@ -37,6 +38,7 @@
                     <p>GPS: {{slide.atributes.gps}} {{slide.atributes.address}}</p>
                   {% endif %}
                 </div>
+                {% endif %}
             {% endif %}
           </div>
           {% endfor %}
