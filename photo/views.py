@@ -24,20 +24,20 @@ def album(request):     # pylint: disable=unused-argument
     context = { **init_context, "devel": settings.DEVEL, "album_list": a_list}
     return render(request, 'photo/album.html', context)
 
-def slides(request):     # pylint: disable=unused-argument
-    "show photo sledis from folder"
+# def slides(request):     # pylint: disable=unused-argument
+#     "show photo sledis from folder"
 
-    folder = request.GET.get('folder', "2025/2025-01 Ski Vinterferie")
-    plist = get_picture_list(folder)
+#     folder = request.GET.get('folder', "2025/2025-01 Ski Vinterferie")
+#     plist = get_picture_list(folder)
 
-    # slides = []
-    # for p in pinfo:
-    #     #print (p)
-    #     slides.append({"url": p[1]})
-    # print(slides)
-    context = {**init_context, "folder":folder, "slides": plist, "interval": SLIDE_INTERVAL}
-    #print(context)
-    return render(request, 'photo/slides.html', context)
+#     # slides = []
+#     # for p in pinfo:
+#     #     #print (p)
+#     #     slides.append({"url": p[1]})
+#     # print(slides)
+#     context = {**init_context, "folder":folder, "slides": plist, "interval": SLIDE_INTERVAL}
+#     #print(context)
+#     return render(request, 'photo/slides.html', context)
 
 def show(request):     # pylint: disable=unused-argument
     "show photo sledis from folder"

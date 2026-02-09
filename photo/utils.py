@@ -77,14 +77,14 @@ def create_folder_table(root_folder: Path, rel_folder=settings.PHOTO_DIR, clear_
     for a in abs_folder_list:
         #l = Path(a)
         l = Path(a).relative_to(rel_folder)
-        print(l)
+        #print(l)
         n = count_pictures(a)
         v = count_video_files(a)
         title = l.name
         date = datetime.today()
         place = ""
         d = read_dict_from_file(a / 'label.json')
-        print(d)
+        #print(d)
         if d:
             title = d['title']
             date = d['date']

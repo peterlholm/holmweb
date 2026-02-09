@@ -17,19 +17,15 @@
               <a class="nav-link" aria-current="page" id="menu_index" aria-current="page" href="{% url 'photo:photo_index' %}">Indeks</a>
             </li>
             {% if devel %}     
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" id="menu_album" aria-current="page" href="{% url 'photo:album' %}">Album</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" id="menu_show" href="{% url 'photo:show' %}">Billeder</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" id="menu_slides" href="{% url 'photo:slide' %}">Slide </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" id="menu_label" href="{% url 'photo:label' %}">Label</a>
-            </li>
-
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" id="menu_album" aria-current="page" href="{% url 'photo:album' %}">Album</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" id="menu_show" href="{% url 'photo:show' %}">Billeder</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" id="menu_label" href="{% url 'photo:label' %}">Label</a>
+              </li>
               <li class="nav-item">
                 <a class="nav-link" aria-current="page" id="menu_func" href="{% url 'photo:functions' %}">Funktioner</a>
               </li>
