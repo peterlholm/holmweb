@@ -1,5 +1,6 @@
 "utils for picture control"
 from pathlib import Path
+from shutil import make_archive
 from datetime import datetime
 import json
 from urllib import parse
@@ -12,10 +13,10 @@ from .models import Album
 
 GPS_ADDRESS = False
 
-PIC_URL = settings.MEDIA_URL + "Photos/"
+PIC_URL = settings.PHOTO_URL
 #PIC_URL = "photo/pictures/Photos/"
 
-DEBUG = False
+_DEBUG = False
 
 def gms2deg(pos):
     "convert to degres"
@@ -29,9 +30,12 @@ def get_pic_filename(folder : Path):
     pictures.sort()
     return pictures
 
-def get_media_filename(folder : Path):
+def get_media_filename(folder : Path, video=True):
     "get list of relative picture and video filenames"
-    medias = [p for p in folder.iterdir() if p.suffix in ('.png', '.PNG', '.jpg', '.jpeg', '.JPG', '.mp4')]
+    if video:
+        medias = [p for p in folder.iterdir() if p.suffix in ('.png', '.PNG', '.jpg', '.jpeg', '.JPG', '.mp4')]
+    else:
+        medias = [p for p in folder.iterdir() if p.suffix in ('.png', '.PNG', '.jpg', '.jpeg', '.JPG')]
     medias.sort()
     return medias
 
@@ -63,7 +67,7 @@ def create_folder_list(root_folder: Path, folderlist:list = None):
         if i.is_dir():
             folderlist.append(i)
             create_folder_list(i, folderlist)
-    if DEBUG:
+    if _DEBUG:
         print(folderlist)
     return folderlist
 
@@ -90,7 +94,7 @@ def create_folder_table(root_folder: Path, rel_folder=settings.PHOTO_DIR, clear_
             date = d['date']
             if 'place' in d:
                 place = d['place']
-        if n>0:
+        if n>0 or v>0:
             s = Album(folder = str(l), name=title, date=date, no_pictures=n, no_video=v, place=place)
             s.save()
             rel_list.append(l)
@@ -99,36 +103,39 @@ def create_folder_table(root_folder: Path, rel_folder=settings.PHOTO_DIR, clear_
 
 def create_album_list():
     "create the list of albums"
-    s = Album.objects.all()
+    s = Album.objects.all().order_by('date')
     s_list = []
     for o in s:
         #print("o", o)
         s_list.append(model_to_dict(o))
         #s_list.append({"name": o.name, "folder" :o.folder, "date": o.date, "no_pictures": o.no_pictures})
-    #print("s_list", s_list)
+    print("s_list", s_list)
     return s_list
 
-def get_picture_list(folder: Path):
-    "get list of (filename, url)"
-    #print("folder",folder)
-    abs_folder = settings.PHOTO_DIR / folder
-    #print("abs_folder", abs_folder)
-    picfiles = get_pic_filename(abs_folder)
-    plist = []
-    pinfo = []
-    for f in picfiles:
-        #print(f)
-        u = get_url_picture(f)
-        info = get_picture_info(f)
-        plist.append({"file":f, "name":f.name, "url":u, "atributes":info})
-        pinfo.append(info)
-    #print("plist", plist)
-    return plist
+# def get_picture_list(folder: Path):
+#     "get list of (filename, url)"
+#     #print("folder",folder)
+#     abs_folder = settings.PHOTO_DIR / folder
+#     #print("abs_folder", abs_folder)
+#     picfiles = get_pic_filename(abs_folder)
+#     plist = []
+#     pinfo = []
+#     for f in picfiles:
+#         #print(f)
+#         u = get_url_picture(f)
+#         info = get_picture_info(f)
+#         plist.append({"file":f, "name":f.name, "url":u, "atributes":info})
+#         pinfo.append(info)
+#     #print("plist", plist)
+#     return plist
 
-def get_media_list(folder: Path):
+def get_media_list(folder: Path, video=True):
     "get list of (filename, url)"
     abs_folder = Path(settings.PHOTO_DIR) / folder
-    picfiles = get_media_filename(abs_folder)
+    if not abs_folder.exists():
+        print("get media list: folder does not exist", abs_folder)
+        return None
+    picfiles = get_media_filename(abs_folder, video=video)
     plist = []
     #pinfo = []
     for f in picfiles:
@@ -163,7 +170,7 @@ def get_picture_info(file: Path):
         model = exif[272]
 
     #print("GPStags", GPStags)
-    if DEBUG:
+    if _DEBUG:
         print("Exif")
         for k,v  in exif.items():
             print(f" {TAGS.get(k,k):25},{k}, {v}")
@@ -204,7 +211,7 @@ def default_dict(album_path: Path):
     if not album_path.is_dir():
         raise FileNotFoundError("not a folder")
     label = {'title':"", "date": ""}
-    pic_list = get_picture_list(album_path)
+    pic_list = get_media_list(album_path, video=False)
     if len(pic_list)>0:
         pic_info = get_picture_info(pic_list[0]['file'])
         #print(pic_info)
@@ -212,6 +219,10 @@ def default_dict(album_path: Path):
         label = {'title': album_path.name, "date": date.strftime('%Y-%m-%d')}
     #print("label", label)
     return label
+
+def save_zip_archive(folder: Path, zipfile: Path):
+    "create a zip file with the folder content"
+    make_archive(zipfile, 'zip', folder, folder)
 
 if __name__ == '__main__':
     print("starter")

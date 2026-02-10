@@ -13,11 +13,10 @@
     height: 80vh;
     flex: 1;
     object-fit: contain;
-    xbackground-color: black;
+    /* background-color: black; */
 }
 
-
- /* slides */
+ /* slide show */
 
 .dark {
     background-color: black;
@@ -39,7 +38,6 @@ carousel-control-prev-icon {
     height: 4rem;
     font-size: 32px;
 }
-
 
 .carousel-inner {
    height: 100%;

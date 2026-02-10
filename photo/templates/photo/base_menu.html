@@ -3,7 +3,7 @@
 
 {% block page %}
   <header>
-    <nav class="navbar navbar-expand-lg  bg-dark d-print-none" data-bs-theme="dark">
+    <nav class="navbar navbar-expand-md  bg-dark d-print-none" data-bs-theme="dark">
       {% comment %} <nav class="navbar navbar-expand-lg xxnavbar-light xbg-light bg-dark d-print-none" data-bs-theme="dark"> {% endcomment %}
         <a class="navbar-brand" href="/photo/#">
           {% comment %} <img src="{% static 'photo/pic/photo_24.svg' %}" alt="photo logo" width="30" height="24" class="d-inline-block align-text-top" /> {% endcomment %}
@@ -21,7 +21,7 @@
                 <a class="nav-link" aria-current="page" id="menu_album" aria-current="page" href="{% url 'photo:album' %}">Album</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" aria-current="page" id="menu_show" href="{% url 'photo:show' %}">Billeder</a>
+                <a class="nav-link" aria-current="page" id="menu_show" href="{% url 'photo:show' %}">Show</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" aria-current="page" id="menu_label" href="{% url 'photo:label' %}">Label</a>

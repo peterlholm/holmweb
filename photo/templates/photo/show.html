@@ -23,7 +23,7 @@
           {% for slide in slides %}
             {% if slide.type == "video" %}
               <div class="carousel-item {% if forloop.first %}active{% endif %}" data-bs-interval="15000">
-                <video style="z-index: 10;" class="slide-video" src="{{ slide.url }}" alt="{{ slide.name }}" xautoplay xmuted controls >
+                <video style="z-index: 10;" class="slide-video" controls >
                   <source src="{{ slide.url }}" type="video/mp4">
                   Cannot show video
                 </video>
@@ -43,21 +43,22 @@
           </div>
           {% endfor %}
         </div>
-      <button class="carousel-control-prev d-print-none" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+      <button class="carousel-control-prev d-print-none" type="button" title="Tilbage" data-bs-target="#myCarousel" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
       </button>
-      <button class="carousel-control-next d-print-none" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+      <button class="carousel-control-next d-print-none" type="button" title="Frem" data-bs-target="#myCarousel" data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
       </button>
   
     </div>
   <div class="footer d-print-none">   
-      <button class="btn btn-primary" onclick="slideSave()"><i class="bi bi-save"></i></button>
-      <button class="btn btn-primary" onclick="printPage()"><i class="bi bi-printer"></i></button>
-      <button class="btn btn-primary" onclick="slidePause()"><i class="bi bi-pause"></i></button>
-      <button class="btn btn-primary" onclick="slideStart()"><i class="bi bi-play"></i></button>
+      <button class="btn btn-primary" title="Gem" onclick="slideSave()"><i class="bi bi-save"></i></button>
+      <button class="btn btn-primary" title="Gem Album" onclick="location.href='{% url "photo:makezip" %}?folder={{folder}}'"><i class="bi bi-save"></i></button>
+      <button class="btn btn-primary" title="Print" onclick="printPage()"><i class="bi bi-printer"></i></button>
+      <button class="btn btn-primary" title="Pause" onclick="slidePause()"><i class="bi bi-pause"></i></button>
+      <button class="btn btn-primary" title="Kør" onclick="slideStart()"><i class="bi bi-play"></i></button>
      
       <span class="text-center">{{folder}}</span>
   </div>
@@ -65,32 +66,35 @@
 
 {% block script %}
   <script>
-    {% comment %} const carouselEl = document.querySelector('#myCarousel');
+    const carouselEl = document.querySelector('#myCarousel');
     const carouselInstance = new bootstrap.Carousel(carouselEl);
     const videos = carouselEl.querySelectorAll('.slide-video');
 
     videos.forEach(video => {
       // Pause carousel when any video starts playing
       video.addEventListener('play', () => {
+        console.log("pause caroussel - video play");
         carouselInstance.pause();
       });
 
       // Resume carousel when any video is paused or ends
       video.addEventListener('pause', () => {
+        console.log("start caroussel - video pause");
         carouselInstance.cycle();
       });
       
       video.addEventListener('ended', () => {
+        console.log("start caroussel - video ended");
         carouselInstance.cycle();
       });
     });
 
     // IMPORTANT: Pause all videos when the user manually switches slides
     carouselEl.addEventListener('slide.bs.carousel', () => {
+      console.log("pause all video - user shift slide");
       videos.forEach(video => video.pause());
-    }); {% endcomment %}
-    
+    }); 
 
-    document.getElementById("menu_slides").classList.add("active");
+    document.getElementById("menu_show").classList.add("active");
   </script>
 {% endblock %}

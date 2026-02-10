@@ -61,6 +61,9 @@ function slideSave() {
   saveImage(imageElement);
 }
 
+function albumSave() {
+  
+}
 function printPage() {
   console.log("Printing page");
   const carouselInstance = getCarouselInstance();

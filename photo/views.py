@@ -1,9 +1,10 @@
 "Views for photo"
 from pathlib import Path
 from shutil import copytree
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect
 from django.conf import settings
-from .utils import create_folder_table, create_album_list, get_picture_list, get_media_list, save_dict_to_file, read_dict_from_file, default_dict#, get_url_picture
+from .utils import create_folder_table, create_album_list, get_media_list, save_dict_to_file, read_dict_from_file, default_dict, save_zip_archive#, get_url_picture
 from .forms import LabelForm
 #from .file_utils import save_dict_to_file, read_dict_from_file, default_dict
 
@@ -24,44 +25,30 @@ def album(request):     # pylint: disable=unused-argument
     context = { **init_context, "devel": settings.DEVEL, "album_list": a_list}
     return render(request, 'photo/album.html', context)
 
-# def slides(request):     # pylint: disable=unused-argument
-#     "show photo sledis from folder"
-
-#     folder = request.GET.get('folder', "2025/2025-01 Ski Vinterferie")
-#     plist = get_picture_list(folder)
-
-#     # slides = []
-#     # for p in pinfo:
-#     #     #print (p)
-#     #     slides.append({"url": p[1]})
-#     # print(slides)
-#     context = {**init_context, "folder":folder, "slides": plist, "interval": SLIDE_INTERVAL}
-#     #print(context)
-#     return render(request, 'photo/slides.html', context)
-
 def show(request):     # pylint: disable=unused-argument
     "show photo sledis from folder"
-    #picturelist(request)
-    #return HttpResponse("Hello, show. Wellcome.")
-    #print(request.GET)
     folder = request.GET.get('folder', "2025/2025-01 Ski Vinterferie")
     plist = get_media_list(folder)
-
-    # slides = []
-    # for p in pinfo:
-    #     #print (p)
-    #     slides.append({"url": p[1]})
-    # print(slides)
+    if plist is None:
+        return HttpResponseForbidden("Forbiden")
     context = {**init_context, "folder":folder, "slides": plist, "interval": SLIDE_INTERVAL}
-    #context = {**init_context, "folder":folder, "slides": plist, "interval": 10000}
-    #print(context)
     return render(request, 'photo/show.html', context)
 
+def makezip(request):
+    "make zipfile from folder and return"
+    folder = request.GET.get('folder')
+    if not folder:
+        print("not", folder)
+        return HttpResponseForbidden("Forbidden")
+    picfolder = Path(settings.PHOTO_DIR) / folder
+    save_zip_archive(picfolder, Path("/tmp/zipfile"))
+    return HttpResponseForbidden("OK")
+    
 def label(request):
     "Label form generator"
     if request.method == "GET":
         album_path = request.GET.get('path', "")
-        photo_path = settings.PHOTO_DIR / album_path
+        photo_path = Path(settings.PHOTO_DIR) / album_path
         form_init = None
         if photo_path.exists():
             file_path = photo_path / "label.json"
@@ -71,7 +58,7 @@ def label(request):
                 form_init = album_dict
             else:
                 def_dict = default_dict(photo_path )
-                #print(def_dict)
+                print(def_dict)
                 form_init = def_dict
             form_init = {**form_init, "path": album_path}
             #print(form_init)
@@ -101,17 +88,18 @@ def menu(request):
     context = init_context
     return render(request, 'photo/base_menu.html', context)
 
-def test2(request):
+def test(request):
     "test page"
     #context = {**init_context, "pic1": "2025/2025-09%20Vinterbad/PXL_20250930_151241088.jpg","pic2": "2025/2025-09%20Vinterbad/PXL_20250930_151251602.MP.jpg"    }
-    pic1 = Path("2025/2025-09 Vinterbad/PXL_20250930_151241088.jpg")
-    pic2 = "2025/2025-09%20Vinterbad/PXL_20250930_151251602.MP.jpg"
-    f1 = "mytest/both"
-    plist = get_picture_list(f1)
+    # pic1 = Path("2025/2025-09 Vinterbad/PXL_20250930_151241088.jpg")
+    # pic2 = "2025/2025-09%20Vinterbad/PXL_20250930_151251602.MP.jpg"
+    pic1 = Path("test/PXL_20250225_165735955.jpg")
+    pic2 = "pictures/test/PXL_20250225_165750218.TS.mp4"
+    #plist = get_picture_list(f1)
     #u = get_url_picture(pic1)
     #plist.append({"file":pic1, "name":pic1.name, "url":u})
-    context = {**init_context, "slides": plist, "pic1": pic1, "pic2": pic2}
-    return render(request, 'photo/test2.html', context)
+    context = {**init_context, "pic1": pic1, "pic2": pic2}
+    return render(request, 'photo/test.html', context)
 
 # dev functions #####################
 
