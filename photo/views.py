@@ -1,7 +1,7 @@
 "Views for photo"
 from pathlib import Path
 from shutil import copytree
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, FileResponse
 from django.shortcuts import render, redirect
 from django.conf import settings
 from .utils import create_folder_table, create_album_list, get_media_list, save_dict_to_file, read_dict_from_file, default_dict, save_zip_archive#, get_url_picture
@@ -41,9 +41,12 @@ def makezip(request):
         print("not", folder)
         return HttpResponseForbidden("Forbidden")
     picfolder = Path(settings.PHOTO_DIR) / folder
-    save_zip_archive(picfolder, Path("/tmp/zipfile"))
-    return HttpResponseForbidden("OK")
-    
+    name = picfolder.name
+    print(name)
+    save_zip_archive(picfolder, Path("/tmp") / name)
+    #return HttpResponseForbidden("OK")
+    return FileResponse(open(Path("/tmp") / (name + ".zip"), 'rb', encoding="utf-8"))
+
 def label(request):
     "Label form generator"
     if request.method == "GET":

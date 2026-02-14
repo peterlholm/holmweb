@@ -222,7 +222,7 @@ def default_dict(album_path: Path):
 
 def save_zip_archive(folder: Path, zipfile: Path):
     "create a zip file with the folder content"
-    make_archive(zipfile, 'zip', folder, folder)
+    make_archive(zipfile, 'zip', folder.parent, folder)
 
 if __name__ == '__main__':
     print("starter")
